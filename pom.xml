@@ -115,6 +115,11 @@
                 <version>1.15</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>4.38.157.ALL</version>
+            </dependency>
             <!-- 工程模块 -->
             <dependency>
                 <groupId>com.ben</groupId>
