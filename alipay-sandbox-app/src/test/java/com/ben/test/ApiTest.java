@@ -1,6 +1,7 @@
 package com.ben.test;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -28,7 +29,7 @@ public class ApiTest {
     // 「沙箱环境」支付宝公钥
     public static String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuwMLIJRlM5/abNEK8h69XPKprk0SP9x7ps5/cMG7sNbFu05pfQN3efOE7Fw9p3uHoXoLNio7dbTFjTxNVVD8S9eGTRc3zqYcULdV1hfOWF6PDx1LTeeGHFnHGBBeWGxALNNuh4XvwEFDA443yYT9OopmzwxmUspoRAT7x6kMPUwWwC9oZDyQKYEF/mSSHj5iouu8ZDoQz+zQZTI1YqqkFtMKTQbtsnakbGLS/MDZ7bow8JTQiL4rCZUGaMh+OrepURRQXOA8zKWgpAFe/r1gDvk57dy5+hsp0B5gx4x3+aSpYvUErNJEcEjtE1KSVfuIfjDSOOAWBQqiZYdGytXjlwIDAQAB";
     // 「沙箱环境」服务器异步通知回调地址
-    public static String notify_url = "https://xfg.natapp.cn/api/v1/alipay/alipay_notify_url";
+    public static String notify_url = "http://ppixcj.natappfree.cc/api/v1/alipay/alipay_notify_url";
     // 「沙箱环境」页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
     public static String return_url = "https://www.baidu.com";
     // 「沙箱环境」
@@ -88,30 +89,32 @@ public class ApiTest {
      * 查询订单
      */
     @Test
-    public void test_alipay_certificateExecute() throws AlipayApiException {
+    public void test_alipay_execute() throws AlipayApiException {
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         AlipayTradeQueryModel bizModel = new AlipayTradeQueryModel();
-        bizModel.setOutTradeNo("2423AAA000032333361X04");
+        bizModel.setOutTradeNo("9084172535292354");
         request.setBizModel(bizModel);
 
-        String body = alipayClient.certificateExecute(request).getBody();
+        String body = alipayClient.execute(request).getBody();
         log.info("测试结果：{}", body);
     }
 
     /**
      * 退款接口
+     * https://opendocs.alipay.com/open/f60979b3_alipay.trade.refund?scene=common&pathHash=e4c921a7
+     *
      */
     @Test
     public void test_alipay_refund() throws AlipayApiException {
         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
         AlipayTradeRefundModel refundModel = new AlipayTradeRefundModel();
-        refundModel.setOutTradeNo("2423AAA000032333361X04");
-        refundModel.setRefundAmount("1.00");
+        refundModel.setOutTradeNo("9084172535292354");
+        refundModel.setRefundAmount("23.23"); // 和数据库中一致
         refundModel.setRefundReason("退款说明");
         request.setBizModel(refundModel);
 
-        AlipayTradeRefundResponse execute = alipayClient.execute(request);
-        log.info("测试结果：{}", execute.isSuccess());
+        AlipayTradeRefundResponse rsp = alipayClient.execute(request);
+        log.info("测试结果：{}", JSON.toJSONString(rsp));
     }
 
 

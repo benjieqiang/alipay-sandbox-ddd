@@ -29,3 +29,8 @@ https://opendocs.alipay.com/open/270/105899
 
 退款
 ![img_3.png](docs/imgs/img_3.png)
+
+## todo: 
+1. 支付流水单保存；对账；
+2. EventBus替换成MQ；
+3. 支付sdk替换成v3版本，看了一下，sdk改动挺大，文档写的很拉胯；

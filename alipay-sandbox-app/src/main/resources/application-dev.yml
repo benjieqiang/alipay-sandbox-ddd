@@ -1,16 +1,6 @@
 server:
   port: 8091
 
-# 线程池配置
-thread:
-  pool:
-    executor:
-      config:
-        core-pool-size: 20
-        max-pool-size: 50
-        keep-alive-time: 5000
-        block-queue-size: 5000
-        policy: CallerRunsPolicy
 
 # 数据库配置；启动时配置数据库资源信息
 spring:
@@ -30,11 +20,19 @@ spring:
     connection-test-query: SELECT 1
   type: com.zaxxer.hikari.HikariDataSource
 
-# MyBatis 配置【如需使用记得打开】
-#mybatis:
-#  mapper-locations: classpath:/mybatis/mapper/*.xml
-#  config-location:  classpath:/mybatis/config/mybatis-config.xml
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  config-location:  classpath:/mybatis/config/mybatis-config.xml
 
+# 支付宝支付 - 沙箱 https://opendocs.alipay.com/common/02kkv7
+alipay:
+  enabled: true
+  app_id: 9021000139656222
+  private_key: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCMw8d2p6uLPB0RZYI4r7KzuKBoZHyKXnK+78Cgh2WUO+IvMdNsXvlntYLnPqsiJ3u/RjKUJ2w+8HigOHZQSi/FIP3YdYJ7kv0AVqR4qtg9InNUL98x4ymJon/1G4gb8tDEKLtZiuJLSJMbvj5i2Q08BcNNjVzV8AB5Dfo3+yJvzJQIlBftqyuqr4Frv6mJ79A+haanU3S+PIGzLY5TvfNgw80apoTKJUMzbdDjaiN2n4qdfupf/CUsYHYHWU2sLEtDKmH0S7ytbOHbvty5i0szekSWD+EO4NRTdMfK55qFmcHQ5JIiUOfAYc+Ya0fmrEu+t+dqucFaDpqC6nbEfk6ZAgMBAAECggEAPfE9Ccq4oxl91RTtG9K8+XcKJ0Xow97R8ZGBG2LZYUSEwK3VUn/skiV+iBG8rtffDYlvYmCCsqORATg3YBd1M/LToXf8RjKlYIu/7lWHuEc7ptU2CzbiJW27jvlhiKLuGROvdbS25df23CN4Qnku6LXEfpDxRDdLjfmHnTDGs5kQHcYpzAlBBwVTS6mJOBrSl93CtjrslF28UF5VyqKUrw+O4I4fhziEcVoV4i5Z9vHgoYcMhX6nLlCQ/xJN3EVp9Ce9eEf6a1JPIPYNln3tOL+jK3bWtZZPHtJF9cAn9uAyHCwTQdX6EHxBnZEWoL/OZsaplCOlEyXR2gDoO28TAQKBgQDu6FJRPmSUbeWwcymw3qgzckvBIo8d/dWk6dmtAJwLR7MR3GMqIzzwb1EG8V0LBrqVitaLXPRr4c7+TkRRDP6eirv6NCbBzUPVEL9zja+9/vZJUxF/5OMuNHK2AWhWKQ9Is1Fxa9LpKC9Zp9TsHYb+4fEp2inYI2WVSD/eo4d4YQKBgQCW1e/z9HYrk4w3ho4ZQBdXv1MuftTgz5ihBsR/5HqehU7IAdRSTf8T5HI6A3u1dRa3RwQs3tZu9Oigeto7PjR/vsNgw6fc+cXEX4GO/+vjN0uWZJewvcperc6IRnt/NLoLW9FS/gLR6cOI0oz3D7Q+PK5zQhj3yop5ohM91tAhOQKBgAh+Zf7Rcw374kClt4O8Rsqdc6gILIJqdeAJGF4YOXQFNo6aAUSMQCxkKMNQbXho4tVSPFJ0GZSEULGl4rPm/F5ynEBG/mHBhHncwJHBJdBhciwlMegUISeRYcqqviTiDNMO3QRlSvhTH2vWlbFXU2dYbRSJ1xcCGyh1ix/FPJnBAoGBAIMxLPW5CRc5zFl3NR0NO8BcbtMgCbRHm+9i3YKHjYdXV4Bq5ut3X4dDyX5gDTd00f8zS5RjdYsohTUf5bRllHAP0gvV4ak3riXxE9T3D4qfS6VRdQaK7PuQnPS2qS+pArBiehx/RqChfCsDRwyUoicHzIv/T4wmpG7K44WD058xAoGATmBYA0kWiNDtDuHavrxoDWeXqfv8r7AS39Go1F8/P8/LBjoeefa8fsTI33X0wniOT6k3jwQaH5M9TZB4PBy3ucsetDHhJoCQL8uoUsJxS2IOR66L3SKB66hbfvx1++jVH6s7gmJeOzHFg4bn0iq557ILPhODtCJHISaypi3GOeM=
+  alipay_public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuwMLIJRlM5/abNEK8h69XPKprk0SP9x7ps5/cMG7sNbFu05pfQN3efOE7Fw9p3uHoXoLNio7dbTFjTxNVVD8S9eGTRc3zqYcULdV1hfOWF6PDx1LTeeGHFnHGBBeWGxALNNuh4XvwEFDA443yYT9OopmzwxmUspoRAT7x6kMPUwWwC9oZDyQKYEF/mSSHj5iouu8ZDoQz+zQZTI1YqqkFtMKTQbtsnakbGLS/MDZ7bow8JTQiL4rCZUGaMh+OrepURRQXOA8zKWgpAFe/r1gDvk57dy5+hsp0B5gx4x3+aSpYvUErNJEcEjtE1KSVfuIfjDSOOAWBQqiZYdGytXjlwIDAQAB
+  notify_url: http://tcbcy4.natappfree.cc/api/v1/alipay/pay_notify # 支付宝会悄悄的给我们发送一个请求，告诉我们支付成功的信息
+  return_url: https://www.baidu.com # 支付完成跳转页面
+  gatewayUrl: https://openapi-sandbox.dl.alipaydev.com/gateway.do
 # 日志
 logging:
   level:
