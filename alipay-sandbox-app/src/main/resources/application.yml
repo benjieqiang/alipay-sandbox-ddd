@@ -1,0 +1,5 @@
+spring:
+  config:
+    name: alipay-sandbox-app
+  profiles:
+    active: dev
