@@ -16,8 +16,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @description 通过抽象类来定义下单的标准
  * @author benjieqiang
+ * @description 通过抽象类来定义下单的标准
  * @date 2024/7/26 2:35 PM
  */
 @Slf4j
@@ -27,7 +27,7 @@ public abstract class AbstractOrderService implements IOrderService {
     protected IOrderRepository repository;
 
     @Override
-    public PayOrderEntity createOrder(ShopCartEntity shopCartEntity) throws Exception{
+    public PayOrderEntity createOrder(ShopCartEntity shopCartEntity) throws Exception {
         // 1. 查询当前用户是否存在掉单和未支付订单
         OrderEntity unpaidOrderEntity = repository.queryUnPayOrder(shopCartEntity);
         if (null != unpaidOrderEntity && OrderStatusVO.PAY_WAIT.equals(unpaidOrderEntity.getOrderStatus())) {

@@ -7,9 +7,12 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.domain.AlipayTradeRefundModel;
+import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.response.AlipayTradeCloseResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -25,7 +28,7 @@ public class ApiTest {
     // 「沙箱环境」应用ID - 您的APPID，收款账号既是你的APPID对应支付宝账号。获取地址；https://open.alipay.com/develop/sandbox/app
     public static String appId = "9021000139656222";
     // 「沙箱环境」商户私钥，你的PKCS8格式RSA2私钥
-    public static String PRIVATE_KEY = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCMw8d2p6uLPB0RZYI4r7KzuKBoZHyKXnK+78Cgh2WUO+IvMdNsXvlntYLnPqsiJ3u/RjKUJ2w+8HigOHZQSi/FIP3YdYJ7kv0AVqR4qtg9InNUL98x4ymJon/1G4gb8tDEKLtZiuJLSJMbvj5i2Q08BcNNjVzV8AB5Dfo3+yJvzJQIlBftqyuqr4Frv6mJ79A+haanU3S+PIGzLY5TvfNgw80apoTKJUMzbdDjaiN2n4qdfupf/CUsYHYHWU2sLEtDKmH0S7ytbOHbvty5i0szekSWD+EO4NRTdMfK55qFmcHQ5JIiUOfAYc+Ya0fmrEu+t+dqucFaDpqC6nbEfk6ZAgMBAAECggEAPfE9Ccq4oxl91RTtG9K8+XcKJ0Xow97R8ZGBG2LZYUSEwK3VUn/skiV+iBG8rtffDYlvYmCCsqORATg3YBd1M/LToXf8RjKlYIu/7lWHuEc7ptU2CzbiJW27jvlhiKLuGROvdbS25df23CN4Qnku6LXEfpDxRDdLjfmHnTDGs5kQHcYpzAlBBwVTS6mJOBrSl93CtjrslF28UF5VyqKUrw+O4I4fhziEcVoV4i5Z9vHgoYcMhX6nLlCQ/xJN3EVp9Ce9eEf6a1JPIPYNln3tOL+jK3bWtZZPHtJF9cAn9uAyHCwTQdX6EHxBnZEWoL/OZsaplCOlEyXR2gDoO28TAQKBgQDu6FJRPmSUbeWwcymw3qgzckvBIo8d/dWk6dmtAJwLR7MR3GMqIzzwb1EG8V0LBrqVitaLXPRr4c7+TkRRDP6eirv6NCbBzUPVEL9zja+9/vZJUxF/5OMuNHK2AWhWKQ9Is1Fxa9LpKC9Zp9TsHYb+4fEp2inYI2WVSD/eo4d4YQKBgQCW1e/z9HYrk4w3ho4ZQBdXv1MuftTgz5ihBsR/5HqehU7IAdRSTf8T5HI6A3u1dRa3RwQs3tZu9Oigeto7PjR/vsNgw6fc+cXEX4GO/+vjN0uWZJewvcperc6IRnt/NLoLW9FS/gLR6cOI0oz3D7Q+PK5zQhj3yop5ohM91tAhOQKBgAh+Zf7Rcw374kClt4O8Rsqdc6gILIJqdeAJGF4YOXQFNo6aAUSMQCxkKMNQbXho4tVSPFJ0GZSEULGl4rPm/F5ynEBG/mHBhHncwJHBJdBhciwlMegUISeRYcqqviTiDNMO3QRlSvhTH2vWlbFXU2dYbRSJ1xcCGyh1ix/FPJnBAoGBAIMxLPW5CRc5zFl3NR0NO8BcbtMgCbRHm+9i3YKHjYdXV4Bq5ut3X4dDyX5gDTd00f8zS5RjdYsohTUf5bRllHAP0gvV4ak3riXxE9T3D4qfS6VRdQaK7PuQnPS2qS+pArBiehx/RqChfCsDRwyUoicHzIv/T4wmpG7K44WD058xAoGATmBYA0kWiNDtDuHavrxoDWeXqfv8r7AS39Go1F8/P8/LBjoeefa8fsTI33X0wniOT6k3jwQaH5M9TZB4PBy3ucsetDHhJoCQL8uoUsJxS2IOR66L3SKB66hbfvx1++jVH6s7gmJeOzHFg4bn0iq557ILPhODtCJHISaypi3GOeM=";
+    public static String PRIVATE_KEY = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCDKsd0psZt/q09GcPUv5b+7P6On/qPVfaOLGI5L71tk4PNUIha7egoUFaTB81U9y+pUq7A4IrpjROgRsNxsJZXrsBB/bWD++GzSNB5r/iDs0g6TrXzlUMU9afVR18tHAxvwutv4S3D1K7oFZf/Y9Rp5oumFwNN33DbZQXUkEJvoH8PHUsjVUtvuex3k1PKvpDO2trlvWsxG1Kup4DJArz6E4fCma1yL0MG9byQPCeFFoYC0yr+Yg+YfIH3ICmudc2h5wjLepQ53Rcn2t7oaXZK6/LA5piS3ZeZEt5wrScGLnukbiHweQTd5dyEixZh0XLGV8kieDpLzt/x9vqZW2CjAgMBAAECggEAYIpf+2+0pMjJ4SrRhAjvrfno8ji1RkJTEhmAwe5tUfU9ESSw95wbP3DCB726V0sH/WwpyzR5iaSYSWNL/qWmQisQvoFp1BbT7A0vxCDMnMKb6q58JSg7E3YrbUL2vlDipm+ksdfew0AK7C7YjNSBRuC08C4H9Iz8l74nKGh1PYqg8k8M6KybI3bJWXjZ1oPeiFmJGzWIWIC5m/Aju82aR8J1PDBbSU6WcAgMLQNKtQiQVVKJuX7H4bwmem0xluYECMUm08Dr16XR4wR45994V/u0rePMESJIjo8IPLDEh9ANXYu7nROqeh2w5APNelcYGU800f7Jp8MCuSTCUs0uoQKBgQDsXBjAp1xmK6oy0INXhJqv3byxR+OGTUCyr6vpnFr+xmKiIxtCILWLIPQwzNLF9pj260Jnmr3yivfy6xW5UVjQ6Ohewg7nTr2IvVWfK2ab6aBnM8Q4kf1CqkIs+SR2CD1Oge27+A9tXpLmeU1BizmANaVheAUXSti9FeneL9zt9QKBgQCOEP+T2QK/LkUyVnyjj8DMLcTCe30azQGGxcLuo1bZfsCvn60rDKQoCYJG+dMEknFjM6hKPEI4LkCwTJQbzux8FON+R3P0921fn37Wluc2OCyh2r6sZsi3WImgBKiibQJH1RLfOdKdIoKaqllQoliWXZ+rcYl4sQfpsG2vMQGdNwKBgQCXCmNm+Yw6XjztLAJCsyKGsBQc1eu3rzZg+ZHKP3iGxw/QvM52e6CHwA9MABfRGby2TbCptGEd1WCNg1zmh+1R0wRrSWdsuQy1jQhiJsHzcGBoktQZsnE9YL/ZLXz3UFydBrp9HA//vCfz0CBmeinMnHuKxb+7GsFWU+KXcc6k4QKBgD33eCNbIvGVEyWzx8XoLCZjSFG0X4tTJHlOxYolwPo5aX6xXW1LpEa6bxLaYYq6/a5Rl/RZeGDc++ZqYKgIh+pPijNIo3GUgyaUgVTEmbFyqzUmHslARAiFG/KqVYwTlE0UyZiIti9IIEOqTi73wUBFMiIr8dStE1CBXjZuX8/dAoGBANwj1svtw9yOLgNrfrXbP9AdCcDhmI36CxnDfpI+QKdY8hMVJSxgJtvz5vRulQ6H9JK3AL7QOK+BJkzQ0Y2C9ozP2ND48DOXPnPi55Ct2HbvOpJ4OxaxiCicolfSgVKc1xURkLkDwKbrGVGGxVPI4fqEQNBeuncmysK0sv+EDdRp";
     // 「沙箱环境」支付宝公钥
     public static String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuwMLIJRlM5/abNEK8h69XPKprk0SP9x7ps5/cMG7sNbFu05pfQN3efOE7Fw9p3uHoXoLNio7dbTFjTxNVVD8S9eGTRc3zqYcULdV1hfOWF6PDx1LTeeGHFnHGBBeWGxALNNuh4XvwEFDA443yYT9OopmzwxmUspoRAT7x6kMPUwWwC9oZDyQKYEF/mSSHj5iouu8ZDoQz+zQZTI1YqqkFtMKTQbtsnakbGLS/MDZ7bow8JTQiL4rCZUGaMh+OrepURRQXOA8zKWgpAFe/r1gDvk57dy5+hsp0B5gx4x3+aSpYvUErNJEcEjtE1KSVfuIfjDSOOAWBQqiZYdGytXjlwIDAQAB";
     // 「沙箱环境」服务器异步通知回调地址
@@ -66,7 +69,7 @@ public class ApiTest {
         request.setReturnUrl(return_url);
 
         JSONObject bizContent = new JSONObject();
-        bizContent.put("out_trade_no", "2423AAA000032333361X04");  // 我们自己生成的订单编号
+        bizContent.put("out_trade_no", "908417253529235er434");  // 我们自己生成的订单编号
         bizContent.put("total_amount", "100.44"); // 订单的总金额
         bizContent.put("subject", "测试商品");   // 支付的名称
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");  // 固定配置
@@ -86,19 +89,38 @@ public class ApiTest {
     }
 
     /**
-     * 查询订单
+     * 查询订单，使用内置的response接收；
      */
     @Test
     public void test_alipay_execute() throws AlipayApiException {
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         AlipayTradeQueryModel bizModel = new AlipayTradeQueryModel();
-        bizModel.setOutTradeNo("9084172535292354");
+        bizModel.setOutTradeNo("908417253529235er434");
         request.setBizModel(bizModel);
 
-        String body = alipayClient.execute(request).getBody();
-        log.info("测试结果：{}", body);
+        AlipayTradeQueryResponse response = alipayClient.execute(request);
+        String tradeNo = response.getTradeNo();
+        System.out.println(tradeNo);
+        log.info("测试结果：{}", JSON.toJSONString(response));
     }
 
+    /**
+     * @param :
+     * @return void
+     * @description 关单接口
+     * https://opendocs.alipay.com/open/8dc9ebb3_alipay.trade.close?scene=common&pathHash=0c042d2b
+     * @author benjieqiang
+     * @date 2024/7/27 2:29 PM
+     */
+    @Test
+    public void test_closeOrder() throws AlipayApiException {
+        AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+        JSONObject bizContent = new JSONObject();
+        bizContent.put("trade_no", "908417253529235er434");
+        request.setBizContent(bizContent.toString());
+        AlipayTradeCloseResponse response = alipayClient.execute(request);
+        log.info("订单关闭结果： {}", JSON.toJSONString(response));
+    }
     /**
      * 退款接口
      * https://opendocs.alipay.com/open/f60979b3_alipay.trade.refund?scene=common&pathHash=e4c921a7
